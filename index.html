@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoCAD 2D Mechanical Drafting Module</title>
+<style>
+:root{--bg:#f3f6fb;--c:#fff;--t:#16202e;--m:#5b6778;--a:#0b5fd7;--b:#d5dce8;--ok:#0a8a4a;--no:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f151d;--c:#18212c;--t:#e8edf4;--m:#93a0b2;--a:#5aa2ff;--b:#2a3646;--ok:#3ecf8e;--no:#ff6b6b}}
+:root[data-theme="dark"]{--bg:#0f151d;--c:#18212c;--t:#e8edf4;--m:#93a0b2;--a:#5aa2ff;--b:#2a3646;--ok:#3ecf8e;--no:#ff6b6b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--t);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><text x='30' y='120' transform='rotate(-25 160 100)' font-size='22' font-family='Arial' font-weight='700' fill='%23808080' fill-opacity='.2'>RAYMOND D. ENTAL</text></svg>")}
+header{background:#0b2545;color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h1{font-size:18px;margin:0}header small{opacity:.8}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:14px}
+h2{font-size:16px;margin:0 0 10px}
+.mods{display:grid;gap:10px}
+.mod{border:2px solid var(--b);border-radius:10px;padding:12px;cursor:pointer;background:var(--c);text-align:left;color:var(--t);font:inherit;width:100%}
+.mod.on{border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 25%,transparent)}
+.mod b{display:block}.mod span{color:var(--m);font-size:13px}
+.chip{display:inline-block;background:#e6f0ff;color:#0b4fb0;border-radius:99px;padding:1px 9px;font-size:12px;margin:4px 4px 0 0}
+.g{display:grid;grid-template-columns:2fr 2fr 70px;gap:10px}.g .w{grid-column:1/-1}
+@media(max-width:560px){.g{grid-template-columns:1fr 70px}.g .w{grid-column:auto}}
+label{font-size:12px;color:var(--m);display:block}
+input{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;background:var(--bg);color:var(--t);font:inherit}
+button.p,button.s{padding:10px 18px;border-radius:8px;border:0;font:inherit;font-weight:600;cursor:pointer}
+button.p{background:var(--a);color:#fff}button.s{background:var(--b);color:var(--t)}
+.warn{background:#fff4d6;color:#6b4a00;border:1px solid #f0c95a;border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:10px}
+.q{padding:10px 0;border-top:1px solid var(--b)}.q p{margin:0 0 6px;font-weight:600}
+.q label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--t);padding:4px 0;cursor:pointer}.q input{width:auto}
+.err{color:var(--no);font-size:13px;min-height:18px}
+.big{font-size:40px;font-weight:800;color:var(--a)}
+.ok{color:var(--ok)}.no{color:var(--no)}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{border-bottom:1px solid var(--b);padding:5px;text-align:left}
+.wrap{overflow-x:auto}
+.paste{background:#fff200;color:#000;border:3px dashed #d00;border-radius:10px;padding:12px;margin-bottom:12px}
+.paste input{background:#fff;color:#000;border-color:#d00}
+canvas{max-width:100%;border:1px solid var(--b);border-radius:8px}
+.lec h3{font-size:15px;margin:14px 0 4px;color:var(--a)}.lec p,.lec li{font-size:14px}.lec ul{margin:4px 0;padding-left:20px}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}.nav button{width:36px;height:36px;border-radius:8px;border:2px solid var(--b);background:var(--c);color:var(--t);font-weight:700;cursor:pointer}
+.nav .d{background:#0a8a4a;border-color:#0a8a4a;color:#fff}.nav .k{border-color:#e0a100;background:#fff4d6;color:#6b4a00}.nav .c{outline:3px solid var(--a)}
+.vid a{display:block;padding:8px 10px;border:1px solid var(--b);border-radius:8px;margin:6px 0;color:var(--a);text-decoration:none;font-weight:600}
+.noselect{user-select:none;-webkit-user-select:none}
+.hide{display:none}
+</style></head><body>
+<header><div><h1>AutoCAD 2D Mechanical Drafting — Interactive Module</h1><small>SDG 4 Quality Education • SDG 9 Industry, Innovation &amp; Infrastructure</small></div><button class="s" id="admBtn">Admin</button></header>
+<main>
+<section id="home">
+ <div class="card"><h2>1. Choose a module (10 items each, randomized)</h2><div class="mods" id="mods"></div></div>
+ <div class="card"><h2>2. Student details (editable)</h2>
+  <div class="g"><div><label>Last name</label><input id="ln" autocomplete="family-name"></div><div><label>First name</label><input id="fn" autocomplete="given-name"></div><div><label>M.I.</label><input id="mi" maxlength="1"></div>
+  <div class="w"><label>Valid email address</label><input id="em" type="email" autocomplete="email"></div></div>
+  <div class="err" id="err"></div>
+  <div class="warn">⚠ The quiz CLOSES automatically if you switch to another tab or window. Your score at that moment is recorded and your result image downloads.</div>
+  <button class="p" id="start">Start Quiz</button></div>
+</section>
+<section id="lec" class="hide"><div class="card lec"><div id="lt"></div><h3>Educational videos (YouTube)</h3><div class="vid" id="vd"></div><div class="warn">Watch the videos now. Once the quiz starts, leaving this tab closes it.</div><button class="s" id="lback">← Back</button> <button class="p" id="lgo">I'm ready — Start Quiz</button></div></section>
+<section id="quiz" class="hide noselect"><div class="card"><div class="warn">Do not leave this tab. Every item must be answered before you can submit, but you may skip and come back. Items and choices are reshuffled for every attempt.</div><div class="nav" id="nav"></div><div id="qs"></div><div class="err" id="err2"></div><button class="s" id="prev">← Previous</button> <button class="p" id="next">Next / Skip →</button> <button class="p" id="submit" disabled>Submit answers</button></div></section>
+<section id="res" class="hide"><div class="card" id="rc"></div></section>
+<section id="adm" class="hide">
+ <div class="card" id="login"><h2>Admin login</h2><input id="pw" type="password" placeholder="Password"><div class="err" id="perr"></div><button class="p" id="pgo" style="margin-top:8px">Login</button></div>
+ <div class="card hide" id="panel"><h2>Admin panel</h2>
+  <!-- ═════════ WHERE TO PASTE THE GOOGLE SHEET LINK: see the yellow box below (or the SHEET_URL line in the script) ═════════ -->
+  <div class="paste"><b>▶ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE (ends with /exec)</b><br><small>This connects the quiz to the Student Score Recorder sheet.</small><input id="surl" placeholder="https://script.google.com/macros/s/XXXXXXXX/exec" style="margin:6px 0"><button class="p" id="ssave">Save link</button> <span id="sstat"></span></div>
+  <p><a id="slink" target="_blank" rel="noopener">Open Student Score Recorder (Google Sheet)</a></p>
+  <div class="wrap" id="tbl"></div><br><button class="s" id="clr">Clear records on this device</button> <button class="s" id="out">Log out</button></div>
+</section>
+</main>
+<script>
+const SHEET_LINK="https://docs.google.com/spreadsheets/d/1mK9CEzJtxtVXs4vm92woSkTJrA2fU4MkhCuRau6WVp0/edit?gid=0#gid=0";
+/* ▼▼▼ OPTION B — PASTE THE APPS SCRIPT WEB APP URL BETWEEN THE QUOTES ON THE NEXT LINE ▼▼▼ */
+let SHEET_URL="https://script.google.com/macros/s/AKfycbyRX1NK0CDqGzQrksRy0RC_qM__k7v7JxFsQG8HBcEQLTFxY65s4iURCsmdF-LEUkoi/exec";
+/* ▲▲▲ (or paste it in the yellow box in the Admin panel — no code editing needed) ▲▲▲ */
+const ADMIN_PW="RDE_2026",WM="RAYMOND D. ENTAL";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const sh=a=>a.map(x=>[Math.random(),x]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+const ls={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const M=[
+{n:"Module 1: Introduction to AutoCAD 2D Environment",s:"Interface • Coordinates • Shortcuts • Precision tools • File setup",q:[
+["Which entry moves 50 units in X and 30 units in Y from the LAST point picked?","@50,30","50,30","@50<30","#50,30"],
+["Which format is correct for polar coordinates (distance 40, angle 45°) from the last point?","@40<45","@40,45","40:45","@45,40"],
+["Which function key toggles ORTHO mode?","F8","F3","F7","F9"],
+["Which command opens the editor used to customize the ribbon, toolbars and shortcut keys?","CUI","LIMITS","UNITS","PURGE"],
+["Which function key toggles Dynamic Input?","F12","F10","F11","F2"],
+["What is the default file extension of an AutoCAD drawing?",".dwg",".dwt",".dws",".bak"],
+["Which file type stores a template with preset units, layers and a title block?",".dwt",".dwg",".dxf",".dwf"],
+["What is the command alias for LINE?","L","LI","LT","LN"],
+["Which drafting aid restricts the cursor to fixed spacing increments?","Snap","Grid","Ortho","Dynamic Input"],
+["Which tool lets you pick exact points such as Endpoint, Midpoint and Center?","Object Snap (OSNAP)","Grid","Ortho","Zoom Extents"]]},
+{n:"Module 2: Fundamentals of 2D Mechanical Drafting",s:"Drawing commands • Orthographic/isometric • Layers & linetypes • Machine components • ANSI/ISO",q:[
+["The TTR option (Tan, Tan, Radius) belongs to which command?","CIRCLE","ELLIPSE","POLYGON","RECTANGLE"],
+["A POLYGON in AutoCAD can have at most how many sides?","1024","256","512","2048"],
+["Which linetype is normally used for hidden edges?","HIDDEN","CENTER","PHANTOM","CONTINUOUS"],
+["Which linetype represents the centerlines of holes and shafts?","CENTER","HIDDEN","PHANTOM","CONTINUOUS"],
+["Which line is drawn thickest on a mechanical drawing?","Visible (object) line","Hidden line","Center line","Dimension line"],
+["The three isometric axes are drawn at which angles?","30°, 90° and 150°","0°, 45° and 90°","45°, 90° and 135°","60°, 90° and 120°"],
+["Which function key cycles the isometric drafting planes (isoplanes)?","F5","F6","F7","F9"],
+["Which orthographic projection method is the ANSI (USA) standard?","Third-angle projection","First-angle projection","Oblique projection","Perspective projection"],
+["Which command opens the Layer Properties Manager?","LAYER","LTSCALE","MATCHPROP","PURGE"],
+["Which machine component fits into a keyway to transmit torque between a shaft and a hub?","Key","Washer","Nut","Bearing"]]},
+{n:"Module 3: Editing and Annotation of Mechanical Drawings",s:"Editing • Chamfer/Fillet/Array • Text & dimensions • Symbols & tolerances • Layouts",q:[
+["Which command creates a parallel copy of an object at a specified distance?","OFFSET","COPY","MIRROR","STRETCH"],
+["Which command rounds the corner between two lines with an arc of a given radius?","FILLET","CHAMFER","BREAK","JOIN"],
+["What does the CHAMFER command create between two lines?","An angled (beveled) edge","A rounded arc","A parallel copy","A mirrored copy"],
+["Which array type suits equally spaced bolt holes around a flange?","Polar array","Rectangular array","Path array","Stretch"],
+["Holding which key during TRIM temporarily switches it to EXTEND?","Shift","Ctrl","Alt","Tab"],
+["Which command creates multiline text using the In-Place Text Editor?","MTEXT","DTEXT","DIMSTYLE","LAYER"],
+["Which command opens the Dimension Style Manager?","DIMSTYLE","DIMLINEAR","STYLE","DIMSCALE"],
+["Which command applies section lining (e.g., ANSI31) to a cut area?","HATCH","REGION","STRETCH","ARRAY"],
+["Which command inserts a geometric tolerance feature control frame?","TOLERANCE","DIMBASELINE","DIMCONTINUE","DIMBREAK"],
+["In a layout, the viewports and title block are placed in which space?","Paper space","Model space","Block space","Xref space"]]}];
+
+const LEC=[`<div class="lec">
+<h3>1. The AutoCAD 2D interface</h3><p>Main parts: <b>Application menu</b>, <b>Quick Access Toolbar</b>, <b>Ribbon</b> (tabs → panels → tools), <b>drawing area</b> (model space), <b>ViewCube/Navigation bar</b>, <b>command line</b>, <b>status bar</b> and the <b>Model/Layout tabs</b>. Switch workspaces (e.g., Drafting &amp; Annotation) from the status bar. Use <b>CUI</b> to customize the ribbon, toolbars and shortcut keys, and save your own workspace.</p>
+<h3>2. Coordinate systems</h3><ul><li><b>Absolute:</b> X,Y measured from the origin (0,0), e.g. 100,50 (with Dynamic Input type #100,50).</li><li><b>Relative:</b> @ΔX,ΔY from the last point, e.g. @50,30.</li><li><b>Polar:</b> @distance&lt;angle, e.g. @40&lt;45. Angle 0° points east; counter-clockwise is positive.</li><li><b>Direct distance entry:</b> with Ortho or Polar on, point the cursor and type the length.</li></ul>
+<h3>3. Command line &amp; shortcuts</h3><p>Type a command or its alias: L Line, C Circle, A Arc, REC Rectangle, POL Polygon, EL Ellipse, M Move, CO Copy, RO Rotate, MI Mirror, O Offset, TR Trim, EX Extend, F Fillet, CHA Chamfer, E Erase, Z Zoom, LA Layer. <b>Enter/Space</b> repeats the last command, <b>Esc</b> cancels, <b>U</b> or Ctrl+Z undoes, Ctrl+S saves.</p>
+<p>Function keys: <b>F3</b> Object Snap, <b>F7</b> Grid, <b>F8</b> Ortho, <b>F9</b> Snap, <b>F10</b> Polar Tracking, <b>F11</b> Object Snap Tracking, <b>F12</b> Dynamic Input, <b>F5</b> isoplane, <b>F2</b> text window.</p>
+<h3>4. Precision drawing tools</h3><ul><li><b>Grid</b> – visual reference dots/lines, never plotted.</li><li><b>Snap</b> – locks the cursor to set increments.</li><li><b>Ortho</b> – forces horizontal/vertical lines. <b>Polar Tracking</b> – guides at set angles.</li><li><b>Object Snap</b> – Endpoint, Midpoint, Center, Intersection, Perpendicular, Tangent, Quadrant, Nearest.</li><li><b>Dynamic Input</b> – shows length/angle boxes at the cursor.</li></ul><p>Rule of drafting: never "eyeball" a point — snap to it or type its value.</p>
+<h3>5. File management &amp; drawing setup</h3><p>Start from a template (<b>.dwt</b>). Save drawings as <b>.dwg</b>; use <b>.dxf</b> to exchange with other software. QSAVE/SAVEAS, autosave (.sv$) and backups (.bak) protect your work. Set <b>UNITS</b> (millimeters, precision), <b>LIMITS</b>, then ZOOM All/Extents. Name files clearly and save early.</p>
+<h3>SDG integration</h3><p><b>SDG 4:</b> accessible, quality technical skills training. <b>SDG 9:</b> drafting skills support industry and infrastructure design.</p></div>`,
+`<div class="lec">
+<h3>1. Drawing commands</h3><ul><li><b>LINE</b> – segments by coordinates, snaps or direct distance.</li><li><b>CIRCLE</b> – Center-Radius, Center-Diameter, 2P, 3P, TTR (tangent-tangent-radius).</li><li><b>ARC</b> – 3-Point, Start-Center-End, Start-End-Radius and more.</li><li><b>RECTANGLE</b> – corners or dimensions, with Chamfer/Fillet options.</li><li><b>POLYGON</b> – 3 to 1024 sides, inscribed or circumscribed in a circle.</li><li><b>ELLIPSE</b> – axis-end or center method; Isocircle in isometric mode.</li></ul>
+<h3>2. Orthographic and isometric drawings</h3><p><b>Orthographic:</b> front, top and right-side views aligned with each other, built with construction lines (XLINE), Object Snap Tracking and Ortho. <b>Third-angle projection</b> is the ANSI (USA) standard; <b>first-angle</b> is common in ISO/Europe.</p><p><b>Isometric:</b> axes at <b>30°, 90° and 150°</b>. Set Snap Style to Isometric and press <b>F5</b> to cycle the Top, Left and Right isoplanes. Circles become ellipses (Isocircle). Measure only along the isometric axes.</p>
+<h3>3. Layers, linetypes, colors</h3><ul><li><b>Visible/object lines</b> – Continuous, thick (≈0.5 mm).</li><li><b>Hidden lines</b> – HIDDEN, thin (≈0.25 mm).</li><li><b>Center lines</b> – CENTER, thin.</li><li><b>Dimension/extension lines</b> – Continuous, thin. <b>Cutting plane</b> – PHANTOM. <b>Hatch</b> – thin.</li></ul><p>Open <b>LAYER</b> to create layers and set color, linetype and lineweight. Draw with everything <b>ByLayer</b>. <b>LTSCALE</b> controls dash size. Keep layer 0 empty for blocks.</p>
+<h3>4. Standard machine components</h3><ul><li><b>Shaft</b> – steps, shoulders, chamfers, keyway, center holes.</li><li><b>Spur gear</b> – outside circle (thick), pitch circle (center line), root circle (thin/hidden); addendum and dedendum.</li><li><b>Bolt &amp; nut</b> – hex head (across flats/corners); thread major diameter thick, minor diameter thin (≈0.8×).</li><li><b>Washer</b> – inside diameter, outside diameter, thickness.</li><li><b>Key</b> – square, rectangular or Woodruff; fits a keyway to transmit torque.</li><li><b>Bearing</b> – inner race, outer race, balls/rollers, cage.</li></ul><p>Turn frequently used parts into <b>blocks</b> for reuse.</p>
+<h3>5. ANSI/ISO drafting standards</h3><p>ASME/ANSI Y14 series covers line conventions and multiview drawings; ISO 128 covers presentation of technical drawings. Use standard sheet sizes (ANSI A–E, ISO A0–A4), standard text height (≈3.5 mm) and consistent line weights so drawings read the same everywhere.</p>
+<h3>SDG integration</h3><p><b>SDG 4:</b> standard-based, transferable skills. <b>SDG 9:</b> standardized drawings enable reliable manufacturing and innovation.</p></div>`,
+`<div class="lec">
+<h3>1. Editing commands</h3><ul><li><b>MOVE / COPY</b> – base point → second point.</li><li><b>ROTATE</b> – angle or Reference option. <b>MIRROR</b> – set MIRRTEXT to 0 to keep text readable.</li><li><b>OFFSET</b> – parallel copy at a distance (or Through).</li><li><b>TRIM / EXTEND</b> – hold <b>Shift</b> to switch between them.</li><li><b>STRETCH</b> – crossing selection moves the vertices inside it.</li><li><b>SCALE</b> – factor or Reference.</li></ul><p>Selection: <b>window</b> (left→right, blue) selects fully enclosed objects; <b>crossing</b> (right→left, green) selects anything touched.</p>
+<h3>2. Mechanical editing tools</h3><ul><li><b>CHAMFER</b> – angled edge (distance-distance or distance-angle).</li><li><b>FILLET</b> – rounded corner with a radius; radius 0 makes a sharp corner.</li><li><b>ARRAY</b> – Rectangular, <b>Polar</b> (bolt circles, flange holes) and Path.</li><li><b>BREAK</b> – opens a gap or splits an object. <b>JOIN</b> – merges collinear lines/arcs.</li></ul>
+<h3>3. Annotation tools</h3><p><b>DTEXT</b> makes single-line text; <b>MTEXT</b> makes multiline text with the In-Place editor. Set fonts and heights in <b>STYLE</b>. <b>MLEADER</b> adds leaders with arrowheads and notes. <b>TABLE</b> builds bills of materials, hole tables and title blocks.</p>
+<h3>4. Dimensioning and Dimension Styles</h3><p>DIMLINEAR, DIMALIGNED, DIMANGULAR, DIMRADIUS, DIMDIAMETER, DIMBASELINE, DIMCONTINUE and DIMCENTER. Open <b>DIMSTYLE</b> to set Lines, Symbols &amp; Arrows, Text, Fit, Primary Units and Tolerances; use DIMSCALE for the plot scale. Good practice: dimension visible features, place dimensions outside the views, avoid duplicates and crossing dimension lines.</p>
+<h3>5. Symbols, tolerances, lines and section lining</h3><ul><li><b>Tolerances:</b> limit (25.02/24.99) and bilateral (25 ±0.05); fits such as H7/g6.</li><li><b>GD&amp;T:</b> the <b>TOLERANCE</b> command inserts feature control frames (flatness, perpendicularity, position).</li><li><b>Centerlines</b> use CENTER linetype; <b>hidden lines</b> show features behind the surface.</li><li><b>Section lining:</b> <b>HATCH</b> with ANSI31 (45°, evenly spaced) on cut surfaces. Do not section shafts, bolts, keys or ribs cut lengthwise.</li></ul>
+<h3>6. Layout preparation</h3><p>Draw in <b>model space</b> at full size (1:1). In a <b>layout (paper space)</b> set the paper with PAGESETUP, insert the title block, create viewports with MVIEW and set each scale with ZOOM XP (0.5XP = 1:2). Lock viewports, put viewport frames on a non-plot layer, then PLOT or export to PDF.</p>
+<h3>SDG integration</h3><p><b>SDG 4:</b> professional documentation skills. <b>SDG 9:</b> clear engineering documents support industrial innovation.</p></div>`];
+/* ▼▼▼ YOUTUBE LINKS: put a specific video URL in "u" (e.g. u:"https://www.youtube.com/watch?v=XXXX"). If "u" is empty, the link opens a YouTube search. ▼▼▼ */
+const VID=[
+[{t:"AutoCAD 2D interface and workspace for beginners",u:"",q:"AutoCAD 2D interface tutorial beginners"},{t:"AutoCAD coordinate systems: absolute, relative, polar",u:"",q:"AutoCAD absolute relative polar coordinates tutorial"},{t:"AutoCAD Object Snap, Ortho, Grid and Snap explained",u:"",q:"AutoCAD osnap ortho polar tracking dynamic input tutorial"}],
+[{t:"AutoCAD orthographic drawing (mechanical) tutorial",u:"",q:"AutoCAD 2D mechanical drawing orthographic views tutorial"},{t:"AutoCAD isometric drawing tutorial",u:"",q:"AutoCAD isometric drawing tutorial isoplane"},{t:"AutoCAD layers and linetypes for drafting",u:"",q:"AutoCAD layers linetypes lineweight tutorial mechanical drafting"}],
+[{t:"AutoCAD editing commands: trim, extend, fillet, chamfer, array",u:"",q:"AutoCAD trim extend fillet chamfer array tutorial"},{t:"AutoCAD dimension styles and dimensioning",u:"",q:"AutoCAD dimension style manager dimensioning tutorial"},{t:"AutoCAD layout, viewports and plotting to PDF",u:"",q:"AutoCAD layout paper space viewport scale plot PDF tutorial"}]];
+let sel=0,cur=null,running=false;
+const SU=()=>SHEET_URL||ls.get("rde_url","");
+$("mods").innerHTML=M.map((m,i)=>`<button class="mod" data-i="${i}"><b>${m.n}</b><span>${m.s}</span><br><span class="chip">SDG 4</span><span class="chip">SDG 9</span><span class="chip">10 items</span></button>`).join("");
+const mk=()=>document.querySelectorAll(".mod").forEach(b=>b.classList.toggle("on",+b.dataset.i===sel));
+$("mods").onclick=e=>{const b=e.target.closest(".mod");if(b){sel=+b.dataset.i;mk()}};mk();
+const show=id=>["home","lec","quiz","res","adm"].forEach(s=>$(s).classList.toggle("hide",s!==id));
+const stamp=()=>new Date().toLocaleString("en-PH",{timeZone:"Asia/Manila",dateStyle:"medium",timeStyle:"medium"})+" (PH)";
+function who(){const ln=$("ln").value.trim(),fn=$("fn").value.trim(),mi=$("mi").value.trim(),em=$("em").value.trim();
+ if(!/^[A-Za-z][A-Za-z .'-]*$/.test(ln))return"Enter a valid last name.";
+ if(!/^[A-Za-z][A-Za-z .'-]*$/.test(fn))return"Enter a valid first name.";
+ if(!/^[A-Za-z]$/.test(mi))return"Enter your middle initial (1 letter).";
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em))return"Enter a valid email address.";
+ return{name:`${ln.toUpperCase()}, ${fn}, ${mi.toUpperCase()}.`,email:em}}
+$("start").onclick=()=>{const w=who();if(typeof w==="string"){$("err").textContent=w;return}
+ $("err").textContent="";const m=M[sel];
+ $("lt").innerHTML=`<h2>${m.n} — Lecture</h2>`+LEC[sel];
+ $("vd").innerHTML=VID[sel].map(v=>`<a href="${v.u||"https://www.youtube.com/results?search_query="+encodeURIComponent(v.q)}" target="_blank" rel="noopener">▶ ${esc(v.t)}</a>`).join("");
+ show("lec");window.scrollTo(0,0)};
+$("lback").onclick=()=>show("home");
+$("lgo").onclick=()=>{const m=M[sel];
+ cur={m:m.n,i:0,items:sh(m.q).map(x=>({q:x[0],a:x[1],o:sh(x.slice(1)),p:null}))};
+ running=true;show("quiz");rq();window.scrollTo(0,0)};
+function rq(){const it=cur.items[cur.i],n=cur.items.length,left=cur.items.filter(x=>x.p===null).length;it.seen=true;
+ $("nav").innerHTML=cur.items.map((x,i)=>`<button data-i="${i}" class="${x.p!==null?"d":x.seen&&i!==cur.i?"k":""} ${i===cur.i?"c":""}">${i+1}</button>`).join("");
+ $("qs").innerHTML=`<h2>${esc(cur.m)}</h2><div class="q"><p>Item ${cur.i+1} of ${n}: ${esc(it.q)}</p>${it.o.map((o,j)=>`<label><input type="radio" name="q" value="${j}"${it.p===o?" checked":""}> ${esc(o)}</label>`).join("")}</div><small>${left?left+" item(s) still unanswered (green = answered, yellow = skipped).":"All items answered — you can submit."}</small>`;
+ $("submit").disabled=left>0;$("prev").disabled=cur.i===0;$("next").textContent=cur.i===n-1?"Jump to first unanswered →":"Next / Skip →"}
+$("next").onclick=()=>{if(cur.i<cur.items.length-1)cur.i++;else{const u=cur.items.findIndex(x=>x.p===null);if(u>=0)cur.i=u}rq()};
+$("prev").onclick=()=>{if(cur.i>0){cur.i--;rq()}};
+$("nav").onclick=e=>{const b=e.target.closest("button");if(b){cur.i=+b.dataset.i;rq()}};
+$("qs").onchange=e=>{if(e.target.name==="q"){cur.items[cur.i].p=cur.items[cur.i].o[+e.target.value];rq()}};
+$("submit").onclick=()=>{if(cur.items.some(x=>x.p===null)){$("err2").textContent="Answer every item before submitting (skipped items are yellow).";return}finish("Completed")};
+["contextmenu","copy","cut","paste"].forEach(t=>document.addEventListener(t,e=>{if(running)e.preventDefault()}));
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&running){collect();finish("CLOSED: tab switched")}});
+function collect(){}
+function fit(c,t,w){if(c.measureText(t).width<=w)return t;while(t.length>3&&c.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"}
+function draw(r){const W=900,H=260+r.key.length*58+50,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d");
+ c.fillStyle="#fff";c.fillRect(0,0,W,H);c.fillStyle="#0b2545";c.fillRect(0,0,W,90);c.fillStyle="#fff";c.font="bold 24px Arial";c.fillText("AutoCAD 2D Mechanical Drafting — Quiz Result",24,42);c.font="14px Arial";c.fillText("SDG 4 • SDG 9",24,70);
+ c.fillStyle="#111";c.font="bold 18px Arial";c.fillText(r.name,24,130);c.font="15px Arial";c.fillText(r.email,24,154);c.fillText(fit(c,r.module,W-48),24,178);
+ c.fillText("Time stamp: "+r.ts,24,202);c.fillText("Status: "+r.status,24,226);
+ c.font="bold 30px Arial";c.fillStyle="#0b5fd7";c.textAlign="right";c.fillText(`Score: ${r.score}/${r.total}`,W-24,140);c.font="bold 18px Arial";c.fillText("Attempt #"+r.attempt,W-24,172);c.textAlign="left";
+ c.fillStyle="#111";c.font="bold 16px Arial";c.fillText("Answer key",24,252);
+ r.key.forEach((k,i)=>{const y=280+i*58;c.font="bold 14px Arial";c.fillStyle="#111";c.fillText(fit(c,`${i+1}. ${k.q}`,W-48),24,y);c.font="13px Arial";c.fillStyle=k.p===k.a?"#0a8a4a":"#c62828";c.fillText(fit(c,`${k.p===k.a?"✔":"✘"} Your answer: ${k.p??"(no answer)"}`,W-48),40,y+18);c.fillStyle="#0a5a9a";c.fillText(fit(c,`Key: ${k.a}`,W-48),40,y+35)});
+ c.save();c.fillStyle="rgba(120,120,120,.16)";c.font="bold 44px Arial";c.rotate(-Math.PI/6);for(let y=0;y<H+700;y+=210)for(let x=-500;x<W+200;x+=470)c.fillText(WM,x,y);c.restore();
+ c.fillStyle="#666";c.font="12px Arial";c.fillText(`${WM} • ${r.ts}`,24,H-16);return cv}
+async function dl(cv,name){const b=await new Promise(r=>cv.toBlob(r,"image/png"));
+ try{const d=window.claude&&await claude.use("downloads");if(d){await d.save({filename:name,data:b});return}}catch(e){if(e&&e.code==="declined")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove()}
+async function finish(status){if(!running)return;running=false;const w=who();const info=typeof w==="string"?{name:"(incomplete details)",email:"(none)"}:w;
+ const rec=ls.get("rde_rec",[]);const attempt=rec.filter(x=>x.email===info.email&&x.module===cur.m).length+1;
+ const score=cur.items.filter(i=>i.p===i.a).length;
+ const r={ts:stamp(),iso:new Date().toISOString(),name:info.name,email:info.email,module:cur.m,attempt,score,total:cur.items.length,status,key:cur.items.map(i=>({q:i.q,p:i.p,a:i.a}))};
+ rec.push(r);ls.set("rde_rec",rec);const cv=draw(r);
+ $("rc").innerHTML=`<h2>${esc(status)}</h2><div class="big">${score}/${r.total}</div><p>${esc(r.name)} • ${esc(r.email)}<br>${esc(r.module)}<br>Attempt #${attempt} • ${esc(r.ts)}</p><p id="sst" class="err" style="color:var(--m)">Recording to Google Sheet…</p><div id="cvh"></div><p><button class="p" id="again">Download result picture</button> <button class="s" id="home2">Back to start</button></p>`;
+ $("cvh").appendChild(cv);show("res");$("start").textContent="Start Quiz";
+ $("again").onclick=()=>dl(cv,fname(r));$("home2").onclick=()=>{cur=null;show("home")};
+ dl(cv,fname(r));
+ const u=SU();
+ if(!u){$("sst").textContent="Saved on this device. Google Sheet link not set yet (Admin → paste link)."}
+ else try{await fetch(u,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify({timestamp:r.ts,name:r.name,email:r.email,module:r.module,attempt:r.attempt,score:`${r.score}/${r.total}`,status:r.status,answerKey:r.key.map((k,i)=>`${i+1}) ${k.p??"-"} | key: ${k.a}`).join(" ; ")})});$("sst").textContent="✔ Sent to Student Score Recorder."}
+ catch(e){$("sst").textContent="Saved on this device only — this host blocks sending to Google Sheets. Use the standalone file on your own web hosting."}}
+const fname=r=>`AutoCAD-Result_${r.name.replace(/[^A-Za-z0-9]+/g,"_")}_A${r.attempt}.png`;
+/* ADMIN */
+$("admBtn").onclick=()=>{show("adm");$("pw").value=""};
+$("pgo").onclick=()=>{if($("pw").value===ADMIN_PW){$("login").classList.add("hide");$("panel").classList.remove("hide");$("surl").value=SU();$("slink").href=SHEET_LINK;tbl()}else $("perr").textContent="Wrong password."};
+$("ssave").onclick=()=>{ls.set("rde_url",$("surl").value.trim());$("sstat").textContent="✔ Saved"};
+$("out").onclick=()=>{$("panel").classList.add("hide");$("login").classList.remove("hide");$("perr").textContent="";show("home")};
+$("clr").onclick=()=>{if(confirm("Clear all records stored on this device?")){ls.set("rde_rec",[]);tbl()}};
+function tbl(){const r=ls.get("rde_rec",[]);$("tbl").innerHTML="<table><tr><th>Time stamp</th><th>Student</th><th>Email</th><th>Module</th><th>Att.</th><th>Score</th><th>Status</th></tr>"+(r.length?r.slice().reverse().map(x=>`<tr><td>${esc(x.ts)}</td><td>${esc(x.name)}</td><td>${esc(x.email)}</td><td>${esc(x.module.slice(0,8))}</td><td>${x.attempt}</td><td>${x.score}/${x.total}</td><td>${esc(x.status)}</td></tr>`).join(""):"<tr><td colspan=7>No records on this device yet.</td></tr>")+"</table>"}
+</script></body></html>
